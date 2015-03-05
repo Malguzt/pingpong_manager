@@ -21,22 +21,25 @@ def keywords():
 
 @app.route('/sentence/<sentence>', methods=['GET'])
 def ask(sentence=None):
-    respond = {
+    response = _getBasicResponse()
+    
+    if sentence.find('ping') > -1 or sentence.find('pong') > -1:
+        response['msg'] = 'Quisiste decir ping pong?'
+        response['cacheTime'] = 10000
+        
+    if sentence.find('jugar') > -1 and sentence.find('ping') > -1 and sentence.find('pong') > -1:
+        response['msg'] = 'Queres jugar con esta?'
+        response['understand'] = True
+        response['waitResponce'] = True
+    
+    return json.dumps(response)
+
+def _getBasicResponse():
+    return {
         'msg' : 'No entiendo',
         'waitResponce' : False,
         'understand' : False,
         'cacheTime' : 0
         }
-    
-    if sentence.find('ping') > -1 or sentence.find('pong') > -1:
-        respond['msg'] = 'Quisiste decir ping pong?'
-        respond['cacheTime'] = 10000
-        
-    if sentence.find('jugar') > -1 and sentence.find('ping') > -1 and sentence.find('pong') > -1:
-        respond['msg'] = 'Queres jugar con esta?'
-        respond['understand'] = True
-        respond['waitResponce'] = True
-    
-    return json.dumps(respond)
 
 app.run(host=os.getenv("IP", "0.0.0.0"),port=int(os.getenv("PORT", 8080)))
