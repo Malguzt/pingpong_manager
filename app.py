@@ -22,7 +22,11 @@ def keywords():
     return json.dumps(wordsList)
 
 @app.route('/sentence/<user_id>/<sentence>', methods=['GET'])
-def ask(user_id=None, sentence=None):
+def sentence(user_id=None, sentence=None):
     return json.dumps(par.respond(user_id, sentence))
+
+@app.route('/sync/<user_id>', methods=['GET'])
+def sync(user_id=None, sentence=None):
+    return json.dumps(par.sync(user_id))
 
 app.run(host=os.getenv("IP", "0.0.0.0"),port=int(os.getenv("PORT", 8080)))
