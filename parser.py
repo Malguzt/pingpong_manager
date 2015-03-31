@@ -9,12 +9,12 @@ class Parser:
 	def respond(self, user_id, sentence):
 		self.initBasicResponse()
 		
-		if sentence.find('ping') > -1 or sentence.find('pong') > -1:
-			self.badSpelling()
-		
 		if sentence.find('jugar') > -1 and sentence.find('ping') > -1 and sentence.find('pong') > -1:
 			self.newPlayer(user_id)
-			
+		else:	
+			if sentence.find('ping') > -1 or sentence.find('pong') > -1:
+				self.badSpelling()
+		
 		if sentence.find('si') > -1 and user_id in self.waiters:
 			self.confirmation(user_id)
 		
@@ -51,7 +51,7 @@ class Parser:
 		self.askForWaiters()
 	
 	def askForWaiters(self):
-		self.response['msg'] += 'Queres jugar con'
+		self.response['msg'] = 'Queres jugar con'
 		for user, time in self.waiters.iteritems():
 			if user not in self.response["users_ids"]:
 				self.response["users_ids"].append(user)
